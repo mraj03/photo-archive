@@ -104,21 +104,27 @@
         /* GALLERY */
         .gallery {
             column-count: 3;
-            column-gap: 22px;
-            padding: 70px 60px;
+            column-gap: 40px;
+            padding: 60px;
             background: #fff;
-            flex-grow: 1;
-            /* allows it to expand inside wrapper */
         }
 
         .photo {
-            position: relative;
+            break-inside: avoid;
+            margin-bottom: 26px;
+            display: flex;
+            justify-content: center;
         }
 
         .photo img {
-            width: 100%;
+            width: 480px;
+            height: 480px;
+            object-fit: cover;
+            /* crops nicely */
             display: block;
-            transition: .3s;
+            margin: auto;
+            cursor: pointer;
+            transition: .3s ease;
         }
 
         /* watermark overlay */
