@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melvin Raj</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: #ffffff;
+            color: #111;
+            font-family: 'Newsreader', 'Times New Roman', 'Serif';
+            font-size: 18px;
+            overflow-x: hidden;
+        }
+
+        /* MAIN CENTERED PAGE */
+        .pageWrap {
+            max-width: 1100px;
+            margin: 40px auto;
+            background: #ffffff;
+            border: 1px solid #6f8a6f;
+            box-sizing: border-box;
+
+            /* ensures it stretches at least full screen */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero {
+            padding: 120px 60px 90px;
+        }
+
+        .gallery {
+            padding: 70px 60px;
+            background: #fff;
+        }
+
+        .siteFooter {
+            padding: 60px 40px;
+            background: #fff;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 100px 40px;
+            max-width: 720px;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: 0px;
+            /* closer letters */
+            margin-bottom: 30px;
+            font-family: 'Newsreader', 'Serif';
+        }
+
+        p {
+            color: #333;
+            font-size: 19px;
+            line-height: 1.9;
+        }
+
+        .nav {
+            margin-top: 40px;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+
+        .nav a {
+            color: #555;
+            margin: 0 18px;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            color: #000;
+        }
+
+        /* GALLERY */
+        .gallery {
+            column-count: 3;
+            column-gap: 22px;
+            padding: 70px 60px;
+            background: #fff;
+            flex-grow: 1;
+            /* allows it to expand inside wrapper */
+        }
+
+        .photo {
+            position: relative;
+        }
+
+        .photo img {
+            width: 100%;
+            display: block;
+            transition: .3s;
+        }
+
+        /* watermark overlay */
+        .photo::after {
+            content: "© Melvin Raj";
+            position: absolute;
+            bottom: 12px;
+            right: 14px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.0);
+            background: rgba(0, 0, 0, 0);
+            padding: 4px 8px;
+            transition: .3s;
+            pointer-events: none;
+        }
+
+        /* show on hover */
+        .photo:hover::after {
+            color: rgba(255, 255, 255, 0.85);
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .photo img:hover {
+            opacity: .8;
+        }
+
+        /* FULLSCREEN VIEWER */
+        #viewer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        /* image */
+        #vimg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 92%;
+            max-height: 88%;
+            object-fit: contain;
+        }
+
+        /* close */
+        .closeBtn {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            font-size: 28px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            color: #111;
+        }
+
+        /* side nav */
+        .navBtn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 46px;
+            cursor: pointer;
+            font-family: Arial;
+            color: #111;
+            padding: 20px;
+            user-select: none;
+        }
+
+        .navBtn.left {
+            left: 20px;
+        }
+
+        .navBtn.right {
+            right: 20px;
+        }
+
+        .navBtn:hover {
+            opacity: .5
+        }
+
+        /* bottom description */
+        .bottomInfo {
+            position: absolute;
+            bottom: 10px;
+            /* move caption closer to image */
+            left: 0;
+            width: 100%;
+            padding: 12px 20px 18px;
+            /* reduced padding */
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0));
+            text-align: center;
+        }
+
+        #meta {
+            max-width: 680px;
+            margin: 6px auto 0 auto;
+            /* tighter gap */
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 15.5px;
+            color: #111;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* Icon controls */
+        .controls {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: #111;
+            border: none;
+            color: white;
+            width: 38px;
+            height: 38px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+            font-family: Arial;
+        }
+
+        .icon-btn:hover {
+            background: #000;
+        }
+
+        /* MOBILE */
+        @media(max-width:900px) {
+            .gallery {
+                column-count: 2;
+                padding: 50px 30px;
+            }
+
+            .frame {
+                flex-direction: column;
+            }
+
+            .frame img {
+                width: 100%;
+                max-height: 65vh;
+                object-fit: contain;
+            }
+
+            .info {
+                width: 100%;
+                padding: 40px;
+            }
+        }
+
+        @media(max-width:600px) {
+            .gallery {
+                column-count: 1;
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 32px
+            }
+
+            p {
+                font-size: 16px
+            }
+
+            .nav a {
+                display: block;
+                margin: 12px 0;
+            }
+        }
+
+        /* SECTION DIVIDER LINES */
+        .sectionLine {
+            border-top: 1px solid #6f8a6f;
+        }
+
+        /* FOOTER */
+        .siteFooter {
+            padding: 60px 40px;
+            background: #fff;
+            border-top: 1px solid #6f8a6f;
+            margin-top: auto;
+            /* pushes footer to bottom if page short */
+        }
+
+        .footerInner {
+            max-width: 700px;
+            margin: auto;
+            text-align: center;
+            font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .footerInner a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .footerInner a:hover {
+            border-bottom: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pageWrap">
+        <div class="hero">
+            <h1>Melvin Raj</h1>
+
+            <p>Capturing everyday life through 35mm film </p>
+
+            <p>
+                When I understood the beauty of chemistry, physics, and mathematics gifting me a moment I can freeze and
+                call it mine — I felt satisfied, and an irresistible sense of joy. So, now I chase that feeling every
+                now
+                and then.
+            </p>
+
+            <div class="nav">
+                <a href="https://www.instagram.com/melvinraj003/">Instagram↗</a>
+                <a href="https://www.melvinraj.com/">Substack↗</a>
+                <a href="mailto:hey@melvinraj.com">Email↗</a>
+            </div>
+        </div>
+
+        <div class="gallery sectionLine" id="gallery">
+
+            <div id="viewer" onclick="outsideClose(event)">
+
+                <!-- CLOSE -->
+                <div class="closeBtn" onclick="closeV()">✕</div>
+
+                <!-- PREV -->
+                <div class="navBtn left" onclick="prev()">‹</div>
+
+                <!-- NEXT -->
+                <div class="navBtn right" onclick="next()">›</div>
+
+                <!-- IMAGE -->
+                <img id="vimg">
+
+                <!-- DESCRIPTION -->
+                <div class="bottomInfo">
+                    <div id="meta"></div>
+                </div>
+            </div>
+
+
+        </div>
+        <footer class="siteFooter sectionLine">
+            <div class="footerInner">
+
+                ©2026 Melvin Raj. All rights reserved.
+
+                <br><br>
+
+                All photographs on this site are part of my photographic archive.
+                Images may not be reproduced, copied, stored, manipulated, or used in any form
+                without prior written permission.
+
+                <br><br>
+
+                Subtle digital watermarking and embedded metadata are used to protect authorship.
+                For prints, publications, or licensing inquiries:
+                <a href="mailto:hey@melvinraj.com">Contact via email</a>
+
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        let photos = []
+        let i = 0
+
+        fetch("photos.json")
+            .then(r => r.json())
+            .then(d => {
+                photos = d.reverse()
+                const g = document.getElementById("gallery")
+                photos.forEach((p, index) => {
+                    const div = document.createElement("div")
+                    div.className = "photo"
+                    div.innerHTML = `<img src="${p.image}" onclick="openV(${index})">`
+                    g.appendChild(div)
+                })
+            })
+
+        function openV(index) {
+            i = index
+            document.getElementById("viewer").style.display = "flex"
+            update()
+        }
+
+        function update() {
+            const p = photos[i]
+            vimg.src = p.image
+            meta.innerHTML = `
+<div style="font-weight:600">${p.camera}</div>
+<div>${p.film}</div>
+<div style="margin-top:8px">${p.description}</div>
+`
+        }
+        function closeV() {
+            viewer.style.display = "none"
+        }
+        function outsideClose(e) {
+            if (e.target.id === "viewer") {
+                closeV()
+            }
+        }
+
+        function next() { if (i < photos.length - 1) { i++; update() } }
+        function prev() { if (i > 0) { i--; update() } }
+    </script>
+</body>
+
+</html>
