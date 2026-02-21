@@ -1,13 +1,13 @@
 [
   {
-  "image":"photo-archive/images/first click.jpg",
+  "image":"/photo-archive/images/first click.jpg",
   "camera":"Pentax ME",
   "film":"Portra 400",
   "description":"Vizag evening light"
  },
 
  {
-  "image":"photo-archive/images/first film click.jpg",
+  "image":"/photo-archive/images/first film click.jpg",
   "camera":"Pentax ME",
   "film":"Portra 400",
   "description":"Vizag evening light"
